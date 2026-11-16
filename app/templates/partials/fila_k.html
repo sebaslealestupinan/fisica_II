@@ -1,0 +1,12 @@
+<tr>
+  <td class="num">{{ '%.4f'|format(f.masa) }}</td>
+  <td class="num">{{ '%.4f'|format(f.l0) }}</td>
+  <td class="num">{{ '%.4f'|format(f.lf) }}</td>
+  <td class="num">{{ '%.4f'|format(f.dl) }}</td>
+  <td class="num">{{ '%.2f'|format(f.k) if f.k else '—' }}</td>
+  <td style="white-space:nowrap">
+    <button class="mini" hx-get="/datos/k/{{ f.id }}/editar" hx-target="closest tr" hx-swap="outerHTML">Editar</button>
+    <button class="mini peligro" hx-delete="/datos/k/{{ f.id }}" hx-target="#tabla-k" hx-swap="outerHTML"
+            hx-confirm="¿Borrar esta medición?">Borrar</button>
+  </td>
+</tr>

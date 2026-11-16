@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block titulo %}Comparación{% endblock %}
+{% block contenido %}
+<h1>Comparación experimental y teórica</h1>
+<p class="explica" style="max-width:72ch">Los períodos medidos (Tabla VI, promediados por masa) frente al modelo \(T = 2\pi\sqrt{m/k}\). Además, el ajuste lineal de \(T^2\) contra \(m\) da una segunda estimación de \(k\), independiente de la ley de Hooke.</p>
+
+<div class="card fila-acciones">
+  <label>Resorte
+    <select onchange="location='/comparacion?resorte='+this.value" aria-label="Resorte">
+      {% for r in resortes %}<option value="{{ r.id }}" {{ 'selected' if r.id == resorte.id }}>{{ r.nombre }}</option>{% endfor %}
+    </select>
+  </label>
+  <a class="btn" href="/datos?resorte={{ resorte.id }}">Editar datos</a>
+  <a class="btn" href="/simulador">Simulador</a>
+</div>
+
+<div id="cmp" data-rid="{{ resorte.id }}">
+  <p id="cmp-msg" class="nota aviso" hidden></p>
+
+  <div class="cmp-graficas">
+    <div class="card"><canvas id="c-T"></canvas></div>
+    <div class="card"><canvas id="c-T2"></canvas></div>
+  </div>
+
+  <div class="cols2">
+    <div class="card">
+      <h3>Resumen por masa</h3>
+      <div class="tabla-scroll"><table>
+        <thead><tr><th>Masa (kg)</th><th>Mediciones</th><th>T exp. (s)</th><th>T teórico (s)</th><th>% error</th></tr></thead>
+        <tbody id="cmp-filas"></tbody>
+        <tfoot><tr><td colspan="4">Error medio</td><td class="num" id="cmp-errmed">—</td></tr></tfoot>
+      </table></div>
+    </div>
+    <div class="card">
+      <h3>Constante elástica k</h3>
+      <div class="lectura" style="grid-template-columns:1fr">
+        <div><span>Ley de Hooke (Tabla V)</span><b id="k-hooke">—</b></div>
+        <div><span>Ajuste de T² vs m</span><b id="k-ajuste">—</b></div>
+        <div><span>Diferencia entre ambas</span><b id="k-dif">—</b></div>
+        <div><span>R² del ajuste</span><b id="k-r2">—</b></div>
+        <div><span>Ordenada del ajuste (s²)</span><b id="k-ord">—</b></div>
+      </div>
+      <p class="explica" style="margin-top:10px">Si la ordenada no es cercana a 0, suele deberse a que el resorte también tiene masa: en la teoría, \(T^2 = \frac{4\pi^2}{k}\left(m + \tfrac{m_{resorte}}{3}\right)\), y el modelo del proyecto desprecia ese término.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/vendor/katex/katex.min.css">
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', path='js/graficos.js') }}"></script>
+<script src="{{ url_for('static', path='js/comparacion.js') }}"></script>
+<script defer src="/static/vendor/katex/katex.min.js"></script>
+<script defer src="/static/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+{% endblock %}

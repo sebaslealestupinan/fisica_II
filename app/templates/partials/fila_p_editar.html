@@ -1,0 +1,10 @@
+<tr>
+  <td><input type="number" name="masa_g" value="{{ '%g'|format(f.masa * 1000) }}" step="any" min="0" aria-label="Masa (g)"></td>
+  <td><input type="number" name="n" value="{{ f.n_oscilaciones }}" step="1" min="1" aria-label="Número de oscilaciones"></td>
+  <td><input type="number" name="t_s" value="{{ '%g'|format(f.tiempo_total) }}" step="any" min="0" aria-label="Tiempo total (s)"></td>
+  <td colspan="3" class="explica" style="text-align:left;color:var(--muted)">masa en g, tiempo en s</td>
+  <td style="white-space:nowrap">
+    <button class="mini primario" hx-put="/datos/p/{{ f.id }}" hx-include="closest tr" hx-target="#tabla-p" hx-swap="outerHTML">Guardar</button>
+    <button class="mini" hx-get="/datos/p/tabla/{{ rid }}" hx-target="#tabla-p" hx-swap="outerHTML">Cancelar</button>
+  </td>
+</tr>

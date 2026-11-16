@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block titulo %}Simulador{% endblock %}
+
+{% macro control(clave, etiqueta, unidad) %}
+  <div class="ctrl">
+    <label for="n-{{ clave }}">{{ etiqueta }} <small>{{ unidad }}</small></label>
+    <input type="number" id="n-{{ clave }}">
+    <input type="range" id="r-{{ clave }}" aria-label="{{ etiqueta }}">
+  </div>
+{% endmacro %}
+
+{% block contenido %}
+<div class="sim">
+
+  <!-- ============ PANEL DE CONTROL ============ -->
+  <aside class="panel">
+    <section class="card">
+      <h3>Parámetros</h3>
+      {{ control('m', 'Masa  m', 'kg') }}
+      {{ control('k', 'Constante elástica  k', 'N/m') }}
+      {{ control('b', 'Amortiguamiento  b', 'N·s/m') }}
+      {{ control('A', 'Amplitud  A', 'cm') }}
+      {{ control('phi', 'Fase inicial  φ', '°') }}
+      <div class="presets">
+        <button data-preset="ideal">Ideal (b = 0)</button>
+        <button data-preset="sub">Subamortiguado</button>
+        <button data-preset="crit">Crítico</button>
+        <button data-preset="sobre">Sobreamortiguado</button>
+      </div>
+      <p class="explica" style="margin:10px 0 0">Tip: <b>arrastra la masa</b> en la animación y suéltala para fijar la posición inicial.</p>
+    </section>
+
+    <section class="card">
+      <h3>Vista</h3>
+      {{ control('zoom', 'Ventana de tiempo', '×') }}
+      {{ control('vel', 'Velocidad de animación', '×') }}
+      <label style="font-size:.9rem"><input type="checkbox" id="chk-ghost" checked> Superponer el caso sin amortiguar</label>
+    </section>
+
+    <section class="card">
+      <h3>Datos del experimento</h3>
+      <p class="explica" style="margin-top:0">Carga la k medida y las masas del montaje real.</p>
+      <div class="fila-acciones">
+        <select id="sel-resorte" aria-label="Resorte">
+          {% for r in resortes %}<option value="{{ r.id }}">{{ r.nombre }}</option>{% endfor %}
+        </select>
+        <button id="btn-cargar" class="primario">Cargar</button>
+      </div>
+      <p id="exp-info" class="explica" style="margin:8px 0 4px"></p>
+      <select id="sel-masa" aria-label="Masa medida" disabled style="width:100%"></select>
+      <p id="exp-cmp" class="explica" style="margin:8px 0 0"></p>
+      <label style="font-size:.9rem;display:block;margin-top:8px"><input type="checkbox" id="chk-exp" disabled> Superponer el período medido <span style="color:var(--muted)">(línea naranja y masa punteada)</span></label>
+    </section>
+
+    <section class="card">
+      <h3>Estimar amortiguamiento</h3>
+      <p class="explica" style="margin-top:0">Con la caída de amplitud de tu montaje. Se usan la <b>k</b> y la <b>m</b> actuales: cárgalas primero.</p>
+      <div class="ctrl" style="grid-template-columns:1fr 86px"><label for="e-a0">Amplitud inicial A₀ <small>cm</small></label><input type="number" id="e-a0" step="any" min="0"></div>
+      <div class="ctrl" style="grid-template-columns:1fr 86px"><label for="e-an">Amplitud tras N osc. A<sub>N</sub> <small>cm</small></label><input type="number" id="e-an" step="any" min="0"></div>
+      <div class="ctrl" style="grid-template-columns:1fr 86px"><label for="e-n">N.º de oscilaciones N</label><input type="number" id="e-n" step="1" min="1" value="10"></div>
+      <button id="btn-est" class="primario">Estimar y aplicar b</button>
+      <p id="b-est" class="explica" style="margin:8px 0 0"></p>
+    </section>
+  </aside>
+
+  <!-- ============ ESCENA Y GRÁFICAS ============ -->
+  <div>
+    <section class="card escena-wrap">
+      <canvas id="escena" aria-label="Animación de la masa en el resorte"></canvas>
+      <div class="barra">
+        <button id="btn-play" class="primario">⏸ Pausar</button>
+        <button id="btn-reset">↺ Reiniciar</button>
+        <div class="t"><span>t</span><input type="range" id="r-t" min="0" max="1" step="0.001" value="0" aria-label="Tiempo"></div>
+        <span id="regimen" class="badge ideal">MAS ideal</span>
+      </div>
+      <div class="vivo">
+        <div><b id="lv-t">0</b><span>t [s]</span></div>
+        <div><b id="lv-x">0</b><span>x [cm]</span></div>
+        <div><b id="lv-v">0</b><span>v [m/s]</span></div>
+        <div><b id="lv-a">0</b><span>a [m/s²]</span></div>
+        <div><b id="lv-ec">0</b><span>E cinética [mJ]</span></div>
+        <div><b id="lv-ep">0</b><span>E potencial [mJ]</span></div>
+        <div><b id="lv-em">0</b><span>E total [mJ]</span></div>
+      </div>
+    </section>
+
+    <div class="graficas">
+      <div class="card"><canvas id="g-x"></canvas></div>
+      <div class="card"><canvas id="g-v"></canvas></div>
+      <div class="card"><canvas id="g-a"></canvas></div>
+      <div class="card"><canvas id="g-e"></canvas></div>
+      <div class="card"><canvas id="g-f"></canvas></div>
+
+      <section class="card">
+        <h3 style="margin:4px 8px 8px">Magnitudes del sistema</h3>
+        <div class="lectura" style="padding:0 8px 8px">
+          <div><span>ω₀ [rad/s]</span><b id="p-w0"></b></div>
+          <div><span>T₀ [s]</span><b id="p-T0"></b></div>
+          <div><span>f₀ [Hz]</span><b id="p-f0"></b></div>
+          <div><span>ζ</span><b id="p-zeta"></b></div>
+          <div><span>b crítico</span><b id="p-bc"></b></div>
+          <div><span>ω<sub>d</sub> [rad/s]</span><b id="p-wd"></b></div>
+          <div><span>T<sub>d</sub> [s]</span><b id="p-Td"></b></div>
+          <div><span>τ = 2m/b [s]</span><b id="p-tau"></b></div>
+          <div><span>x₀ [cm]</span><b id="p-x0"></b></div>
+          <div><span>v₀ [m/s]</span><b id="p-v0"></b></div>
+          <div><span>E₀ [mJ]</span><b id="p-E0"></b></div>
+          <div><span>Energía perdida</span><b id="p-loss"></b></div>
+        </div>
+        <p class="ecuacion" id="ecuacion" style="margin:0 8px 8px"></p>
+      </section>
+    </div>
+
+    <p class="explica" style="margin-top:14px">
+      x se mide desde la posición de equilibrio, positivo hacia abajo; en un resorte vertical la gravedad solo
+      desplaza el equilibrio, por eso <i>g</i> no aparece en la ecuación. La «energía perdida» se mide al final de la ventana de tiempo mostrada.
+    </p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/fisica.js') }}"></script>
+<script src="{{ url_for('static', path='js/graficos.js') }}"></script>
+<script src="{{ url_for('static', path='js/simulador.js') }}"></script>
+{% endblock %}

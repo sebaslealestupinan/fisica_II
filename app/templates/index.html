@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block clase_main %}angosto{% endblock %}
+{% block contenido %}
+<section class="hero">
+  <p class="meta">Física 2 · Docente: Raúl Castilblanco · Universidad Católica de Colombia (2026)</p>
+  <h1>Modelado y simulación del movimiento armónico simple en un sistema masa-resorte</h1>
+  <p class="meta">Análisis experimental y computacional de sus propiedades físicas</p>
+  <ul class="integrantes">
+    <li>Duvan Steven Guerrero Valero</li>
+    <li>Nicole García Mora</li>
+    <li>Sebastián Leal Estupiñán</li>
+    <li>Juan David Rodríguez Suarez</li>
+    <li>Jaider Stevan Barbosa Ávila</li>
+  </ul>
+</section>
+
+<div class="accesos">
+  <a class="card" href="/simulador"><strong>Simulador →</strong><span>Mueve la masa, cambia m, k y el amortiguamiento, y observa x, v, a y las energías.</span></a>
+  <a class="card" href="/datos"><strong>Datos experimentales →</strong><span>Tablas V y VI: k, períodos y errores calculados automáticamente.</span></a>
+  <a class="card" href="/comparacion"><strong>Comparación →</strong><span>Período experimental frente al teórico, y k por dos métodos.</span></a>
+</div>
+
+<h2>Resumen</h2>
+<p>Este proyecto analiza el movimiento armónico simple de un sistema masa-resorte mediante un estudio experimental y una simulación computacional. Se busca comprender cómo influyen la masa y la constante elástica del resorte en el período, la frecuencia y el comportamiento oscilatorio del sistema.</p>
+<p>Con diferentes masas suspendidas de un resorte se registran la elongación y el tiempo de varias oscilaciones; a partir de ellos se calculan la constante elástica, la frecuencia angular, el período y la frecuencia. La simulación representa la posición, la velocidad y la aceleración en función del tiempo, y los resultados experimentales se comparan con los teóricos para identificar las diferencias debidas a factores experimentales.</p>
+<p><b>Palabras clave:</b> movimiento armónico simple, masa-resorte, oscilaciones, ley de Hooke, frecuencia, período, simulación computacional.</p>
+
+<h2>Pregunta orientadora</h2>
+<p class="pregunta">¿Cómo influyen la masa y la constante elástica de un resorte en el período y la frecuencia de oscilación, y qué diferencias existen entre los resultados experimentales y los obtenidos mediante una simulación del movimiento armónico simple?</p>
+
+<h2>Objetivos</h2>
+<h3>Objetivo general</h3>
+<p>Analizar experimental y computacionalmente el movimiento armónico simple de un sistema masa-resorte, mediante la aplicación de las leyes y ecuaciones fundamentales de la física, para determinar la influencia de la masa y la constante elástica sobre el período y la frecuencia de oscilación.</p>
+<h3>Objetivos específicos</h3>
+<ol>
+  <li>Construir un montaje experimental de un sistema masa-resorte utilizando diferentes masas para estudiar su comportamiento oscilatorio.</li>
+  <li>Determinar la constante elástica del resorte mediante la ley de Hooke y las mediciones de elongación.</li>
+  <li>Medir el período de oscilación para diferentes masas y calcular las frecuencias correspondientes.</li>
+  <li>Aplicar las ecuaciones del movimiento armónico simple para determinar la posición, velocidad y aceleración en función del tiempo.</li>
+  <li>Desarrollar una simulación computacional que permita visualizar el movimiento y representar gráficamente sus principales magnitudes.</li>
+  <li>Comparar los resultados experimentales con los valores teóricos.</li>
+  <li>Analizar la transformación de la energía cinética y potencial elástica durante el movimiento oscilatorio.</li>
+</ol>
+{% endblock %}

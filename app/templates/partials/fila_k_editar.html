@@ -1,0 +1,10 @@
+<tr>
+  <td><input type="number" name="masa_g" value="{{ '%g'|format(f.masa * 1000) }}" step="any" min="0" aria-label="Masa (g)"></td>
+  <td><input type="number" name="l0_cm" value="{{ '%g'|format(f.longitud_inicial * 100) }}" step="any" min="0" aria-label="Longitud inicial (cm)"></td>
+  <td><input type="number" name="lf_cm" value="{{ '%g'|format(f.longitud_final * 100) }}" step="any" min="0" aria-label="Longitud final (cm)"></td>
+  <td colspan="2" class="explica" style="text-align:left;color:var(--muted)">g y cm</td>
+  <td style="white-space:nowrap">
+    <button class="mini primario" hx-put="/datos/k/{{ f.id }}" hx-include="closest tr" hx-target="#tabla-k" hx-swap="outerHTML">Guardar</button>
+    <button class="mini" hx-get="/datos/k/tabla/{{ rid }}" hx-target="#tabla-k" hx-swap="outerHTML">Cancelar</button>
+  </td>
+</tr>

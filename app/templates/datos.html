@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block titulo %}Datos experimentales{% endblock %}
+{% block clase_main %}angosto{% endblock %}
+{% block contenido %}
+<h1>Datos experimentales</h1>
+<p>Ingresa las mediciones; la elongación, la constante k, los períodos y los errores se calculan solos. Masas en <b>gramos</b> y longitudes en <b>centímetros</b> (se guardan en kg y m).</p>
+
+{% if proteccion and not editor %}<p class="nota">Estás en modo lectura. Para agregar, editar o importar datos, <a href="/editar">entra con la contraseña</a>.</p>{% endif %}
+{% if aviso %}<p class="nota {{ 'aviso' if tipo_aviso == 'error' }}" role="status">{{ aviso }}</p>{% endif %}
+
+<div class="card">
+  <div class="fila-acciones">
+    <label>Resorte
+      <select onchange="location='/datos?resorte='+this.value" aria-label="Resorte">
+        {% for r in resortes %}<option value="{{ r.id }}" {{ 'selected' if r.id == resorte.id }}>{{ r.nombre }}</option>{% endfor %}
+      </select>
+    </label>
+    <form method="post" action="/resortes" class="fila-acciones">
+      <input type="text" name="nombre" placeholder="Nuevo resorte…" required maxlength="60" aria-label="Nombre del nuevo resorte">
+      <button>Crear</button>
+    </form>
+    {% if resortes|length > 1 %}
+    <form method="post" action="/resortes/{{ resorte.id }}/borrar" onsubmit="return confirm('¿Borrar «{{ resorte.nombre }}» y todas sus mediciones?')">
+      <button class="peligro">Borrar este resorte</button>
+    </form>
+    {% endif %}
+    <span style="flex:1"></span>
+    <a class="btn" href="/simulador">Abrir el simulador →</a>
+  </div>
+</div>
+
+<h2>Tabla V · Determinación de la constante elástica</h2>
+<p class="explica">\(k = mg/\Delta L\) con \(g = 9{,}81\) m/s². Se promedian las filas para obtener la \(k\) del resorte.</p>
+<div class="card">
+  {% with %}{% set rid = tk.rid %}{% set filas = tk.filas %}{% set k_prom = tk.k_prom %}{% set k_std = tk.k_std %}{% set error = tk.error %}
+    {% include "partials/tabla_k.html" %}
+  {% endwith %}
+  <p><a href="/datos/export/k.csv?resorte={{ resorte.id }}">Exportar CSV</a></p>
+  <form class="fila-acciones" method="post" action="/datos/import/k" enctype="multipart/form-data" style="margin-top:10px">
+    <input type="hidden" name="resorte_id" value="{{ resorte.id }}">
+    <input type="file" name="archivo" accept=".csv,text/csv" required aria-label="Archivo CSV de la Tabla V">
+    <button>Importar CSV</button>
+    <a href="/datos/plantilla/k.csv">Descargar plantilla</a>
+  </form>
+
+</div>
+
+<h2>Tabla VI · Medición del período</h2>
+<p class="explica">\(T_{exp} = t_{total}/N\);  \(T_{teórico} = 2\pi\sqrt{m/k}\) con la \(k\) promedio de la Tabla V;  error = \(|T_{exp}-T_{teo}|/T_{teo}\cdot 100\).</p>
+<div class="card">
+  {% with %}{% set rid = tp.rid %}{% set filas = tp.filas %}{% set k_prom = tp.k_prom %}{% set error = tp.error %}
+    {% include "partials/tabla_p.html" %}
+  {% endwith %}
+  <p><a href="/datos/export/p.csv?resorte={{ resorte.id }}">Exportar CSV</a></p>
+  <form class="fila-acciones" method="post" action="/datos/import/p" enctype="multipart/form-data" style="margin-top:10px">
+    <input type="hidden" name="resorte_id" value="{{ resorte.id }}">
+    <input type="file" name="archivo" accept=".csv,text/csv" required aria-label="Archivo CSV de la Tabla VI">
+    <button>Importar CSV</button>
+    <a href="/datos/plantilla/p.csv">Descargar plantilla</a>
+  </form>
+
+</div>
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/vendor/katex/katex.min.css">
+<style>
+  .alta { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; align-items: end; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .alta label { font-size: .8rem; color: var(--muted); display: block; }
+  td input[type=number] { min-width: 70px; }
+</style>
+{% endblock %}
+{% block scripts %}
+<script src="/static/vendor/htmx.min.js"></script>
+<script defer src="/static/vendor/katex/katex.min.js"></script>
+<script defer src="/static/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block titulo %}Modelo físico{% endblock %}
+{% block clase_main %}angosto{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/static/vendor/katex/katex.min.css">
+{% endblock %}
+
+{% block contenido %}
+<h1>Modelo físico y matemático</h1>
+<p>Una masa suspendida de un resorte vertical; su movimiento se analiza respecto a la posición de equilibrio. Se usan la ley de Hooke y las ecuaciones del movimiento armónico simple.</p>
+
+<h2>Ley de Hooke</h2>
+<p>La fuerza restauradora de un resorte ideal es proporcional a su deformación y de sentido contrario:</p>
+<div class="formula">$$F = -kx$$</div>
+<p>con \(F\) en N, \(k\) la constante elástica en N/m y \(x\) la deformación respecto a la longitud natural en m. En el equilibrio vertical, la constante se determina con la elongación estática \(\Delta L\):</p>
+<div class="formula">$$k = \frac{mg}{\Delta L}$$</div>
+
+<h2>Cantidades del movimiento</h2>
+<div class="cols2">
+  <div class="card"><b>Frecuencia angular</b><div class="formula">$$\omega = \sqrt{\frac{k}{m}}$$</div></div>
+  <div class="card"><b>Período</b><div class="formula">$$T = 2\pi\sqrt{\frac{m}{k}}$$</div></div>
+  <div class="card"><b>Frecuencia</b><div class="formula">$$f = \frac{1}{T}$$</div></div>
+</div>
+<h3>Posición, velocidad y aceleración</h3>
+<div class="formula">$$x(t) = A\cos(\omega t + \phi)$$</div>
+<div class="formula">$$v(t) = -A\omega\sin(\omega t + \phi)$$</div>
+<div class="formula">$$a(t) = -A\omega^2\cos(\omega t + \phi)$$</div>
+
+<h2>Condiciones iniciales</h2>
+<p>La masa se desplaza hasta una amplitud \(A\) y se libera sin velocidad inicial: \(x_0 = A\), \(v_0 = 0\), \(\phi = 0\). La posición se simplifica a \(x(t) = A\cos(\omega t)\).</p>
+
+<h2>Análisis energético</h2>
+<div class="formula">$$E_p = \tfrac{1}{2}kx^2 \qquad E_c = \tfrac{1}{2}mv^2 \qquad E_m = E_c + E_p = \tfrac{1}{2}kA^2$$</div>
+<p>En los extremos la velocidad es cero y la energía potencial es máxima; al pasar por el equilibrio la rapidez es máxima y también la energía cinética. En el modelo ideal la energía mecánica total es constante.</p>
+
+<h2>Variables y parámetros</h2>
+<div class="cols2">
+  <div class="card">
+    <div class="tabla-scroll"><table>
+      <thead><tr><th>Símbolo</th><th>Variable</th><th>Unidad</th></tr></thead>
+      <tbody>
+        <tr><td>\(t\)</td><td>Tiempo</td><td>s</td></tr>
+        <tr><td>\(x(t)\)</td><td>Desplazamiento</td><td>m</td></tr>
+        <tr><td>\(v(t)\)</td><td>Velocidad</td><td>m/s</td></tr>
+        <tr><td>\(a(t)\)</td><td>Aceleración</td><td>m/s²</td></tr>
+        <tr><td>\(A\)</td><td>Amplitud</td><td>m</td></tr>
+        <tr><td>\(T\)</td><td>Período</td><td>s</td></tr>
+        <tr><td>\(f\)</td><td>Frecuencia</td><td>Hz</td></tr>
+        <tr><td>\(\omega\)</td><td>Frecuencia angular</td><td>rad/s</td></tr>
+        <tr><td>\(\phi\)</td><td>Fase inicial</td><td>rad</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="card">
+    <div class="tabla-scroll"><table>
+      <thead><tr><th>Símbolo</th><th>Parámetro</th><th>Unidad</th></tr></thead>
+      <tbody>
+        <tr><td>\(m\)</td><td>Masa</td><td>kg</td></tr>
+        <tr><td>\(k\)</td><td>Constante elástica</td><td>N/m</td></tr>
+        <tr><td>\(g\)</td><td>Aceleración gravitacional</td><td>m/s²</td></tr>
+        <tr><td>\(b\)</td><td>Coeficiente de amortiguamiento (ampliación)</td><td>N·s/m</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<h2>Ampliación: amortiguamiento</h2>
+<p>El simulador incluye, además del modelo ideal, una fuerza de amortiguamiento viscoso proporcional a la velocidad. La ecuación del movimiento pasa a ser</p>
+<div class="formula">$$m\ddot{x} + b\dot{x} + kx = 0$$</div>
+<p>Con \(\gamma = b/2m\), \(\omega_0 = \sqrt{k/m}\) y la razón de amortiguamiento \(\zeta = b / (2\sqrt{km})\), hay tres regímenes:</p>
+<div class="tabla-scroll"><table>
+  <thead><tr><th>Régimen</th><th>Condición</th><th>Comportamiento</th></tr></thead>
+  <tbody>
+    <tr><td>Subamortiguado</td><td>\(\zeta &lt; 1\)</td><td style="text-align:left">Oscila con frecuencia \(\omega_d=\sqrt{\omega_0^2-\gamma^2}\) y amplitud que decae como \(e^{-\gamma t}\).</td></tr>
+    <tr><td>Crítico</td><td>\(\zeta = 1\)</td><td style="text-align:left">Regresa al equilibrio sin oscilar en el menor tiempo posible.</td></tr>
+    <tr><td>Sobreamortiguado</td><td>\(\zeta &gt; 1\)</td><td style="text-align:left">Regresa al equilibrio sin oscilar, más lentamente.</td></tr>
+  </tbody>
+</table></div>
+<p>Con \(b = 0\) se recupera exactamente el movimiento armónico simple. En el caso subamortiguado:</p>
+<div class="formula">$$x(t) = e^{-\gamma t}\left[x_0\cos(\omega_d t) + \frac{v_0 + \gamma x_0}{\omega_d}\sin(\omega_d t)\right]$$</div>
+<h3>Estimar \(b\) a partir del experimento</h3>
+<p>En el caso subamortiguado, la amplitud cae en cada ciclo por un factor constante. Si se mide la amplitud inicial \(A_0\) y la amplitud \(A_N\) después de \(N\) oscilaciones completas, el decremento logarítmico por ciclo es</p>
+<div class="formula">$$\delta = \frac{1}{N}\ln\frac{A_0}{A_N} \qquad \zeta = \frac{\delta}{\sqrt{4\pi^2 + \delta^2}} \qquad b = 2\zeta\sqrt{km}$$</div>
+<p>El simulador aplica esta relación en «Estimar amortiguamiento» usando la \(k\) y la \(m\) que estén cargadas. Es válida para amortiguamiento débil o moderado (\(\zeta &lt; 1\)), con \(A_N\) medida en el mismo sentido de oscilación que \(A_0\).</p>
+<p>El simulador usa la solución analítica de cada régimen (no una integración numérica aproximada), y se verificó contra una integración Runge-Kutta independiente.</p>
+
+<h2>Supuestos y simplificaciones</h2>
+<ul>
+  <li>El resorte es elástico lineal y cumple la ley de Hooke en el rango de deformación usado.</li>
+  <li>La masa suspendida se considera concentrada en un solo cuerpo.</li>
+  <li>La masa del resorte es despreciable frente a la masa suspendida.</li>
+  <li>El movimiento es únicamente vertical y se analiza respecto al equilibrio.</li>
+  <li>El modelo ideal no considera rozamiento ni resistencia del aire (el simulador permite añadirlos con \(b\)).</li>
+  <li>La constante \(k\) permanece aproximadamente constante y las oscilaciones están dentro del límite elástico.</li>
+</ul>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="/static/vendor/katex/katex.min.js"></script>
+<script defer src="/static/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+{% endblock %}

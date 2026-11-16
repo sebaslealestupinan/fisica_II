@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block titulo %}Procedimiento{% endblock %}
+{% block clase_main %}angosto{% endblock %}
+{% block head %}<link rel="stylesheet" href="/static/vendor/katex/katex.min.css">{% endblock %}
+{% block contenido %}
+<h1>Procedimiento experimental</h1>
+
+<h2>Materiales y equipo</h2>
+<div class="cols2">
+  <div class="card">
+    <h3>Experimentales</h3>
+    <ul>
+      <li>Resorte metálico</li>
+      <li>Soporte universal</li>
+      <li>Juego de masas conocidas</li>
+      <li>Regla o cinta métrica</li>
+      <li>Cronómetro</li>
+      <li>Balanza (si es necesario verificar las masas)</li>
+      <li>Computador para registrar y procesar los datos</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Computacionales</h3>
+    <p>Este sitio: el <a href="/simulador">simulador</a> calcula y representa la posición, velocidad y aceleración usando los valores experimentales de masa, constante elástica y amplitud, y las <a href="/datos">tablas</a> calculan k, períodos y errores.</p>
+  </div>
+</div>
+
+<h2>Pasos</h2>
+<ol>
+  <li>Instalar el resorte verticalmente sobre un soporte universal, verificando que pueda oscilar libremente.</li>
+  <li>Medir la longitud natural del resorte antes de colocar cualquier masa.</li>
+  <li>Suspender una masa conocida y esperar hasta que el sistema alcance el equilibrio.</li>
+  <li>Medir la longitud del resorte con la masa suspendida y calcular su elongación.</li>
+  <li>Repetir con diferentes masas para obtener varios valores de elongación.</li>
+  <li>Calcular la constante elástica con la ley de Hooke. <em>(Tabla V en «Datos».)</em></li>
+  <li>Seleccionar una masa, desplazarla ligeramente de su posición de equilibrio y liberarla sin impulso adicional.</li>
+  <li>Medir el tiempo de diez oscilaciones y repetir la medición para reducir errores.</li>
+  <li>Calcular el período experimental dividiendo el tiempo total entre el número de oscilaciones. <em>(Tabla VI.)</em></li>
+  <li>Repetir con diferentes masas y registrar los resultados.</li>
+  <li><em>(Opcional, para estimar el amortiguamiento)</em> Con una masa fija, medir la amplitud inicial \(A_0\) y la amplitud después de \(N\) oscilaciones completas (por ejemplo, 10). Con esos tres datos el simulador estima \(b\).</li>
+  <li>Calcular la frecuencia, la frecuencia angular y demás magnitudes del movimiento.</li>
+  <li>Incorporar los valores al <a href="/simulador">simulador</a> (botón «Cargar» en «Datos del experimento») para comparar el comportamiento teórico con el experimental.</li>
+</ol>
+
+<h2>Metodología de simulación</h2>
+<ol>
+  <li>Registrar las masas y las elongaciones.</li>
+  <li>Determinar la constante elástica.</li>
+  <li>Calcular la frecuencia angular, el período y la frecuencia teóricos.</li>
+  <li>Establecer las condiciones iniciales (amplitud y velocidad inicial).</li>
+  <li>Implementar las ecuaciones de posición, velocidad y aceleración.</li>
+  <li>Generar las gráficas de posición, velocidad y aceleración contra el tiempo.</li>
+  <li>Calcular y visualizar la energía cinética, potencial elástica y mecánica total.</li>
+  <li>Modificar masa y constante elástica para observar su influencia.</li>
+  <li>Comparar los períodos teóricos con los medidos y analizar las causas de error.</li>
+</ol>
+{% endblock %}
+
+{% block scripts %}
+<script defer src="/static/vendor/katex/katex.min.js"></script>
+<script defer src="/static/vendor/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}]})"></script>
+{% endblock %}

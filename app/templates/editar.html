@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block titulo %}Modo edición{% endblock %}
+{% block clase_main %}angosto{% endblock %}
+{% block contenido %}
+<h1>Modo edición</h1>
+<p>Cualquiera puede ver el sitio y usar el simulador. Para <b>agregar, editar, borrar o importar datos</b> se necesita la contraseña del grupo.</p>
+{% if error %}<p class="nota aviso" role="alert">{{ error }}</p>{% endif %}
+<form method="post" action="/editar" class="card fila-acciones">
+  <input type="password" name="password" placeholder="Contraseña" required autofocus aria-label="Contraseña de edición">
+  <button class="primario">Entrar</button>
+</form>
+{% endblock %}

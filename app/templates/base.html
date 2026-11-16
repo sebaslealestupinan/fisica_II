@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Movimiento armónico simple{% endblock %} · Física 2</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Cpath d='M16 3v4l-5 2 10 3-10 3 10 3-10 3 5 2' fill='none' stroke='white' stroke-width='1.8' stroke-linejoin='round'/%3E%3Crect x='11' y='23' width='10' height='6' rx='1.5' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <header class="topbar">
+    <div class="in">
+      <a class="brand" href="/">MAS <span>masa-resorte</span></a>
+      <nav>
+        {% set enlaces = [
+          ('inicio', '/', 'Inicio'),
+          ('modelo', '/modelo', 'Modelo físico'),
+          ('procedimiento', '/procedimiento', 'Procedimiento'),
+          ('datos', '/datos', 'Datos'),
+          ('simulador', '/simulador', 'Simulador'),
+          ('comparacion', '/comparacion', 'Comparación'),
+          ('conclusiones', '/conclusiones', 'Conclusiones'),
+        ] %}
+        {% for clave, url, texto in enlaces %}
+          <a href="{{ url }}" class="{{ 'activo' if seccion == clave }} {{ 'destacado' if clave == 'simulador' }}">{{ texto }}</a>
+        {% endfor %}
+        {% if proteccion %}{% if editor %}<a href="/salir">Salir de edición</a>{% else %}<a href="/editar">🔒 Editar</a>{% endif %}{% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="{% block clase_main %}{% endblock %}">
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <footer>Física 2 · Universidad Católica de Colombia · 2026</footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,28 @@
+<div id="tabla-k">
+  {% if error %}<p class="error">⚠ {{ error }}</p>{% endif %}
+  <div class="tabla-scroll"><table>
+    <thead>
+      <tr><th>Masa (kg)</th><th>Longitud inicial (m)</th><th>Longitud final (m)</th><th>Elongación (m)</th><th>k (N/m)</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for f in filas %}{% include "partials/fila_k.html" %}{% else %}
+      <tr><td colspan="6" class="vacio">Aún no hay mediciones.</td></tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4">k promedio</td>
+        <td class="num">{{ '%.2f'|format(k_prom) if k_prom else '—' }}{% if k_std %} ± {{ '%.2f'|format(k_std) }}{% endif %}</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table></div>
+
+  <form class="alta" hx-post="/datos/k" hx-target="#tabla-k" hx-swap="outerHTML">
+    <input type="hidden" name="resorte_id" value="{{ rid }}">
+    <div><label>Masa (g)</label><input type="number" name="masa_g" step="any" min="0" required></div>
+    <div><label>Long. inicial (cm)</label><input type="number" name="l0_cm" step="any" min="0" required></div>
+    <div><label>Long. final (cm)</label><input type="number" name="lf_cm" step="any" min="0" required></div>
+    <div><button class="primario">Agregar</button></div>
+  </form>
+</div>

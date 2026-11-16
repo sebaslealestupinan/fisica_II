@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mas-masa-resorte
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers --forwarded-allow-ips='*'
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DATABASE_URL   # cadena de conexión de Neon (se pega en el panel de Render)
+        sync: false
+      - key: EDIT_PASSWORD  # contraseña para editar (se pone en el panel de Render)
+        sync: false

@@ -1,0 +1,24 @@
+<div id="tabla-p"{% if oob %} hx-swap-oob="true"{% endif %}>
+  {% if error %}<p class="error">⚠ {{ error }}</p>{% endif %}
+  {% if not k_prom %}
+    <p class="nota aviso">Para calcular el período teórico y el error, primero ingresa mediciones de k en la Tabla V.</p>
+  {% endif %}
+  <div class="tabla-scroll"><table>
+    <thead>
+      <tr><th>Masa (kg)</th><th>N.º oscilaciones</th><th>Tiempo total (s)</th><th>T experimental (s)</th><th>T teórico (s)</th><th>% error</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for f in filas %}{% include "partials/fila_p.html" %}{% else %}
+      <tr><td colspan="7" class="vacio">Aún no hay mediciones.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+
+  <form class="alta" hx-post="/datos/p" hx-target="#tabla-p" hx-swap="outerHTML">
+    <input type="hidden" name="resorte_id" value="{{ rid }}">
+    <div><label>Masa (g)</label><input type="number" name="masa_g" step="any" min="0" required></div>
+    <div><label>N.º de oscilaciones</label><input type="number" name="n" step="1" min="1" value="10" required></div>
+    <div><label>Tiempo total (s)</label><input type="number" name="t_s" step="any" min="0" required></div>
+    <div><button class="primario">Agregar</button></div>
+  </form>
+</div>
